@@ -1,9 +1,12 @@
 #include "../includes/cub3d.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
     void    *mlx;
     void    *win;
+
+    if (check_map(argc, argv) == 0)
+        exit(EXIT_FAILURE);
 
     mlx = mlx_init();
     if (!mlx)
@@ -19,6 +22,7 @@ int main(void)
         return (1);
     }
 
-    mlx_loop(mlx);
+    mlx_loop(mlx); /* boucle infini qui maintient la fenetre ouverte et
+    ecoute les evenements (clics, touche, mouvements de fenetres, ...) */
     return (0);
 }
