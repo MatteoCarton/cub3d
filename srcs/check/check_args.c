@@ -6,27 +6,24 @@ static int open_file(char *filename)
 
     fd = open(filename, O_RDONLY);
     if (fd < 0)
-    {
-        perror("Error\nOpening file");
         return (0);
-    }
     close(fd);
     return (1);
 }
 static int check_name_map(char *map_name)
 {
-    int len;
+    int length;
 
-    len = 0;
+    length = 0;
 
-    while (map_name[len] != '\0')
-        len++;
-    if (len < 4 || map_name[len - 4] != '.' || map_name[len - 3] != 'c' ||
-        map_name[len - 2] != 'u' || map_name[len - 1] != 'b')
+    while (map_name[length] != '\0')
+        length++;
+    if (length < 4 || map_name[length - 4] != '.' || map_name[length - 3] != 'c' ||
+        map_name[length - 2] != 'u' || map_name[length - 1] != 'b')
         return (0);
     return (1);
 }
-int check_map(int argc, char **argv)
+int check_args(int argc, char **argv)
 {
     if (argc < 2)
         return (printf("Error\nNo map provided\n"), 0);

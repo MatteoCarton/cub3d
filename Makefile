@@ -12,7 +12,8 @@ INCDIR = includes
 OBJDIR = obj
 
 SRCS = $(SRCSDIR)/main.c \
-       $(SRCSDIR)/check/check_arg.c
+       $(SRCSDIR)/check/check_args.c \
+       $(SRCSDIR)/check/check_map.c
 
 OBJS = $(patsubst $(SRCSDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 

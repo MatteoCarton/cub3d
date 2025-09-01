@@ -5,6 +5,8 @@ int main(int argc, char **argv)
     void    *mlx;
     void    *win;
 
+    if (check_args(argc, argv) == 0)
+        exit(EXIT_FAILURE);
     if (check_map(argc, argv) == 0)
         exit(EXIT_FAILURE);
 

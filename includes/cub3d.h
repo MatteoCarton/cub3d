@@ -7,6 +7,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
+# include "../libft/libft.h"
 
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
@@ -38,6 +39,7 @@ typedef struct s_textures
 	int ceiling[3]; // (R, G, B)
 }	t_textures;
 
+int check_args(int argc, char **argv);
 int check_map(int argc, char **argv);
 
 #endif
