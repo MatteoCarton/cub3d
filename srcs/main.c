@@ -11,10 +11,12 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     if (check_map(argc, argv, &textures) == 0)
         exit(EXIT_FAILURE);
-    printf("textures->north: %s\n", textures.north);
-    printf("textures->south: %s\n", textures.south);
-    printf("textures->west: %s\n", textures.west);
-    printf("textures->east: %s\n", textures.east);
+    printf("textures->NO: %s\n", textures.north);
+    printf("textures->SO: %s\n", textures.south);
+    printf("textures->WE: %s\n", textures.west);
+    printf("textures->EA: %s\n", textures.east);
+    printf("Floor color: R=%d, G=%d, B=%d\n", textures.floor[0], textures.floor[1], textures.floor[2]);
+    printf("Ceiling color: R=%d, G=%d, B=%d\n", textures.ceiling[0], textures.ceiling[1], textures.ceiling[2]);
 
     mlx = mlx_init();
     if (!mlx)
