@@ -135,6 +135,7 @@ static void parse_line(char *line, t_textures *textures)
         parse_color(line, textures->floor);
     else if (ft_strncmp(line, "C ", 2) == 0)
         parse_color(line, textures->ceiling);
+    
 }
 
 int check_map(int argc, char **argv, t_textures *textures)
@@ -148,7 +149,6 @@ int check_map(int argc, char **argv, t_textures *textures)
     while(line != NULL)
     {
         parse_line(line, textures);
-        // printf("%s", line);
         free(line);
         line = get_next_line(fd);
     }
