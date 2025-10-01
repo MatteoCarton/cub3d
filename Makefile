@@ -21,6 +21,8 @@ SRCS = $(SRCSDIR)/main.c \
        $(SRCSDIR)/parsing/map_grid.c \
 	   $(SRCSDIR)/textures/load_textures.c \
 	   $(SRCSDIR)/player/init_player.c \
+	   $(SRCSDIR)/raycasting/init_ray.c \
+	   $(SRCSDIR)/rendering/render.c \
 
 OBJS = $(patsubst $(SRCSDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 

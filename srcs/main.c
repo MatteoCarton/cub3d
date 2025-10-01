@@ -40,6 +40,17 @@ int main(int argc, char **argv)
         return (1);
     }
 
+    game.img = mlx_new_image(game.mlx, WIN_WIDTH, WIN_HEIGHT);
+    if (!game.img)
+    {
+        printf("Error\nFailed to create image\n");
+        return (1);
+    }
+    game.addr = mlx_get_data_addr(game.img, &game.bits_per_pixel,
+            &game.line_length, &game.endian);
+
+    render_frame(&game, &textures, &map);
+
     mlx_loop(game.mlx); /* boucle infini qui maintient la fenetre ouverte et
     ecoute les evenements (clics, touche, mouvements de fenetres, ...) */
     free_map_grid(&map);

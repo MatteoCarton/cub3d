@@ -35,6 +35,13 @@ typedef struct s_game // structure principale qui contient tout
     void    *img_east;
 
 	t_player    player;
+
+	void        *img;           // Pointeur vers l'image
+    char        *addr;          // Adresse des données de l'image
+    int         bits_per_pixel; // Bits par pixel (bits_per_pixel, line_length, endian : Infos techniques nécessaires pour MLX)
+    int         line_length;    // Longueur d'une ligne
+    int         endian;         // Ordre des octets
+
 }	t_game;
 
 typedef struct s_map
@@ -57,6 +64,38 @@ typedef struct s_textures
 	int floor[3]; // (R, G, B)
 	int ceiling[3]; // (R, G, B)
 }	t_textures;
+
+typedef struct s_ray
+{
+    // Direction du rayon
+    double  ray_dir_x;
+    double  ray_dir_y;
+    
+    // Position dans la map (quelle case on vérifie)
+    int     map_x;
+    int     map_y;
+    
+    // Distance jusqua la prochaine bordure (vertical/horizontal)
+    double  dist_to_bord_x;
+    double  dist_to_bord_y;
+    
+    // Distance pour avancer d'une case complète (calculer au debut, ne change pas)
+    double  delta_dist_x;
+    double  delta_dist_y;
+    
+    // Dans quelle direction on avance (-1 ou +1)
+    int     step_direction_x; // -1 si on va à gauche, +1 si on va à droite
+    int     step_direction_y; // -1 si on va en haut, +1 si on va en bas
+    
+    // Distance perpendiculaire au mur (évite l'effet fish-eye)
+    double  perp_wall_dist;
+
+    // Quel côté du mur on a touché (0 = vertical, 1 = horizontal)
+    int     side;
+
+    // Hauteur du mur à dessiner (en pixels)
+    int     line_height;
+}   t_ray;
 
 int		check_args(int argc, char **argv);
 int		check_map(int argc, char **argv, t_textures *textures, t_map *map);
@@ -81,5 +120,16 @@ void    load_all_textures(t_game *game, t_textures *textures);
 
 //src/player
 void	init_player(t_player *player, t_map *map);
+
+//src/raycasting
+void    init_ray(t_ray *ray, t_player *player, int x);
+void    init_ray_step(t_ray *ray, t_player *player);
+void    algo_dda(t_ray *ray, t_map *map);
+void    calculate_wall_distance(t_ray *ray, t_player *player);
+
+//src/rendering
+void    render_frame(t_game *game, t_textures *textures, t_map *map);
+void    put_pixel(t_game *game, int x, int y, int color);
+void    draw_vertical_line(t_game *game, int x, int start_y, int end_y, int color);
 
 #endif
