@@ -81,4 +81,9 @@ void	calculate_wall_distance(t_ray *ray, t_player *player)
 		ray->perp_wall_dist = (ray->map_y - player->pos_y
 				+ (1 - ray->step_direction_y) / 2) / ray->ray_dir_y;
 	ray->line_height = (int)(WIN_HEIGHT / ray->perp_wall_dist);
+	if (ray->side == 0)
+		ray->wall_x = player->pos_y + ray->perp_wall_dist * ray->ray_dir_y;
+	else
+		ray->wall_x = player->pos_x + ray->perp_wall_dist * ray->ray_dir_x;
+	ray->wall_x -= floor(ray->wall_x);
 }

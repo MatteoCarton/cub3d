@@ -14,6 +14,17 @@
 # define WIN_HEIGHT 600
 # define FOV 0.66
 
+typedef struct s_texture_img
+{
+	void	*img;
+	char	*addr;
+	int		width;
+	int		height;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_texture_img;
+
 typedef struct s_map
 {
 	char	**grid;
@@ -50,10 +61,10 @@ typedef struct s_game // structure principale qui contient tout
 	void	*mlx;
 	void	*win;
 
-	void    *img_north;
-    void    *img_south;
-    void    *img_west;
-    void    *img_east;
+	t_texture_img	tex_north;
+	t_texture_img	tex_south;
+	t_texture_img	tex_west;
+	t_texture_img	tex_east;
 
 	t_player    player;
 	t_map       *map;           // Pointeur vers la map (pour les collisions)
@@ -97,6 +108,9 @@ typedef struct s_ray
 
     // Hauteur du mur à dessiner (en pixels)
     int     line_height;
+
+    // Position exacte où le rayon a touché le mur (pour les textures)
+    double  wall_x;
 }   t_ray;
 
 int		check_args(int argc, char **argv);
@@ -138,6 +152,9 @@ void    draw_vertical_line(t_game *game, int x, int start_y, int end_y,
 void    calculate_draw_limits(t_ray *ray, int *start, int *end);
 void    draw_column(t_game *game, t_ray *ray, t_textures *textures, int x);
 int     rgb_to_int(int *rgb);
+int     get_texture_color(t_texture_img *tex, int tex_x, int tex_y);
+void    draw_textured_wall(t_game *game, t_ray *ray, int x, int start,
+			int end);
 
 //src/events
 int     handle_keypress(int keycode, t_game *game);

@@ -8,6 +8,17 @@ int	rgb_to_int(int *rgb)
 	return ((rgb[0] << 16) | (rgb[1] << 8) | rgb[2]);
 }
 
+/* Récupère la couleur d'un pixel (tex_x, tex_y) depuis une texture
+Même principe que put_pixel mais en lecture au lieu d'écriture */
+int	get_texture_color(t_texture_img *tex, int tex_x, int tex_y)
+{
+	char	*pixel;
+
+	pixel = tex->addr + (tex_y * tex->line_length + tex_x
+			* (tex->bits_per_pixel / 8));
+	return (*(unsigned int *)pixel);
+}
+
 void	put_pixel(t_game *game, int x, int y, int color)
 {
 	char	*dst;
@@ -47,21 +58,16 @@ void	calculate_draw_limits(t_ray *ray, int *start, int *end)
 		*end = WIN_HEIGHT - 1;
 }
 
-/* Dessine une colonne complète : plafond, mur, sol
+/* Dessine une colonne complète : plafond, mur texturé, sol
 Pour chaque colonne X de l'écran (0 à 799), on dessine du haut en bas */
 void	draw_column(t_game *game, t_ray *ray, t_textures *textures, int x)
 {
 	int	start;
 	int	end;
-	int	color;
 
 	calculate_draw_limits(ray, &start, &end);
 	draw_vertical_line(game, x, 0, start - 1, rgb_to_int(textures->ceiling));
-	if (ray->side == 0)
-		color = (ray->step_direction_x > 0) ? 0xFF0000 : 0x0000FF;
-	else
-		color = (ray->step_direction_y > 0) ? 0x00FF00 : 0xFFFF00;
-	draw_vertical_line(game, x, start, end, color);
+	draw_textured_wall(game, ray, x, start, end);
 	draw_vertical_line(game, x, end + 1, WIN_HEIGHT - 1,
 		rgb_to_int(textures->floor));
 }
