@@ -18,7 +18,8 @@ SRCS = $(SRCSDIR)/main.c \
        $(SRCSDIR)/parsing/parse_textures.c \
        $(SRCSDIR)/parsing/map_validator.c \
        $(SRCSDIR)/parsing/map_reader.c \
-       $(SRCSDIR)/parsing/map_grid.c
+       $(SRCSDIR)/parsing/map_grid.c \
+	   $(SRCSDIR)/textures/load_textures.c \
 
 OBJS = $(patsubst $(SRCSDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 

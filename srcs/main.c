@@ -2,9 +2,8 @@
 
 int main(int argc, char **argv)
 {
-    void    *mlx;
-    void    *win;
-    t_textures textures;
+    t_game      game;
+    t_textures  textures;
 
     ft_bzero(&textures, sizeof(t_textures));
     if (check_args(argc, argv) == 0)
@@ -18,21 +17,24 @@ int main(int argc, char **argv)
     printf("Floor color: R=%d, G=%d, B=%d\n", textures.floor[0], textures.floor[1], textures.floor[2]);
     printf("Ceiling color: R=%d, G=%d, B=%d\n", textures.ceiling[0], textures.ceiling[1], textures.ceiling[2]);
 
-    mlx = mlx_init();
-    if (!mlx)
+    game.mlx = mlx_init();
+    if (!game.mlx)
     {
         printf("Error\nFailed to initialize MLX\n");
         return (1);
     }
-    
-    win = mlx_new_window(mlx, WIN_WIDTH, WIN_HEIGHT, "cub3D");
-    if (!win)
+
+    load_all_textures(&game, &textures);
+    printf("All textures loaded successfully!\n");
+
+    game.win = mlx_new_window(game.mlx, WIN_WIDTH, WIN_HEIGHT, "cub3D");
+    if (!game.win)
     {
         printf("Error\nFailed to create window\n");
         return (1);
     }
 
-    mlx_loop(mlx); /* boucle infini qui maintient la fenetre ouverte et
+    mlx_loop(game.mlx); /* boucle infini qui maintient la fenetre ouverte et
     ecoute les evenements (clics, touche, mouvements de fenetres, ...) */
     return (0);
 }

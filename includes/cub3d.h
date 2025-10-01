@@ -17,6 +17,11 @@ typedef struct s_game // structure principale qui contient tout
 {
 	void	*mlx;
 	void	*win;
+
+	void    *img_north;
+    void    *img_south;
+    void    *img_west;
+    void    *img_east;
 }	t_game;
 
 typedef struct s_map
@@ -36,7 +41,7 @@ typedef struct s_player // position et direction du joueur
 
 typedef struct s_textures
 {
-	char *north;
+	char *north; // juste le chemin "./textures/north.xpm"
 	char *south;
 	char *west;
 	char *east;
@@ -62,5 +67,8 @@ void	free_map_lines(char **lines, int line_count);
 void	free_map_grid(t_map *map);
 
 int		parse_map_grid(char **lines, int start, t_map *map);
+
+//src/textures
+void    load_all_textures(t_game *game, t_textures *textures);
 
 #endif
