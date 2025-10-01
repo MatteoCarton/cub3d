@@ -20,6 +20,7 @@ SRCS = $(SRCSDIR)/main.c \
        $(SRCSDIR)/parsing/map_reader.c \
        $(SRCSDIR)/parsing/map_grid.c \
 	   $(SRCSDIR)/textures/load_textures.c \
+	   $(SRCSDIR)/player/init_player.c \
 
 OBJS = $(patsubst $(SRCSDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 

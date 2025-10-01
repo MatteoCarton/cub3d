@@ -22,6 +22,7 @@ static int	find_map_start(char **lines, int line_count, t_textures *textures)
 	return (-1);
 }
 
+//DEBUG
 static void	print_map_info(t_map *map)
 {
 	printf("Map successfully parsed!\n");
@@ -30,12 +31,11 @@ static void	print_map_info(t_map *map)
 		map->player_x, map->player_y, map->player_dir);
 }
 
-int	check_map(int argc, char **argv, t_textures *textures)
+int	check_map(int argc, char **argv, t_textures *textures, t_map *map)
 {
 	char	**lines;
 	int		line_count;
 	int		map_start;
-	t_map	map;
 	int		i;
 
 	(void)argc;
@@ -56,14 +56,13 @@ int	check_map(int argc, char **argv, t_textures *textures)
 
 	map_start = find_map_start(lines, line_count, textures);
 	if (!validate_textures(textures) || map_start == -1
-		|| !parse_map_grid(lines, map_start, &map)
-		|| !validate_map_closed(&map))
+		|| !parse_map_grid(lines, map_start, map)
+		|| !validate_map_closed(map))
 	{
 		free_map_lines(lines, line_count);
 		return (0);
 	}
-	print_map_info(&map);
+	print_map_info(map); // DEBUG
 	free_map_lines(lines, line_count);
-	free_map_grid(&map);
 	return (1);
 }

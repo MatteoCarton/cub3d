@@ -4,11 +4,12 @@ int main(int argc, char **argv)
 {
     t_game      game;
     t_textures  textures;
+    t_map       map;
 
     ft_bzero(&textures, sizeof(t_textures));
     if (check_args(argc, argv) == 0)
         exit(EXIT_FAILURE);
-    if (check_map(argc, argv, &textures) == 0)
+    if (check_map(argc, argv, &textures, &map) == 0)
         exit(EXIT_FAILURE);
     printf("textures->NO: %s\n", textures.north);
     printf("textures->SO: %s\n", textures.south);
@@ -27,6 +28,11 @@ int main(int argc, char **argv)
     load_all_textures(&game, &textures);
     printf("All textures loaded successfully!\n");
 
+    init_player(&game.player, &map);
+    printf("Player initialized at (%.2f, %.2f) dir=(%.2f, %.2f)\n",
+        game.player.pos_x, game.player.pos_y,
+        game.player.dir_x, game.player.dir_y);
+
     game.win = mlx_new_window(game.mlx, WIN_WIDTH, WIN_HEIGHT, "cub3D");
     if (!game.win)
     {
@@ -36,5 +42,6 @@ int main(int argc, char **argv)
 
     mlx_loop(game.mlx); /* boucle infini qui maintient la fenetre ouverte et
     ecoute les evenements (clics, touche, mouvements de fenetres, ...) */
+    free_map_grid(&map);
     return (0);
 }
