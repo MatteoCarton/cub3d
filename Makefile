@@ -23,6 +23,8 @@ SRCS = $(SRCSDIR)/main.c \
 	   $(SRCSDIR)/player/init_player.c \
 	   $(SRCSDIR)/raycasting/init_ray.c \
 	   $(SRCSDIR)/rendering/render.c \
+	   $(SRCSDIR)/rendering/draw.c \
+	   $(SRCSDIR)/events/handle_input.c \
 
 OBJS = $(patsubst $(SRCSDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 

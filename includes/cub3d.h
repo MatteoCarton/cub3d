@@ -14,6 +14,27 @@
 # define WIN_HEIGHT 600
 # define FOV 0.66
 
+typedef struct s_map
+{
+	char	**grid;
+	int		width;
+	int		height;
+	int		player_x;
+	int		player_y;
+	char	player_dir;
+}	t_map;
+
+typedef struct s_textures
+{
+	char *north; // juste le chemin "./textures/north.xpm"
+	char *south;
+	char *west;
+	char *east;
+
+	int floor[3]; // (R, G, B)
+	int ceiling[3]; // (R, G, B)
+}	t_textures;
+
 typedef struct s_player // position et direction du joueur
 {
 	double  pos_x;      // Position X dans la map (coordonnees)
@@ -35,6 +56,8 @@ typedef struct s_game // structure principale qui contient tout
     void    *img_east;
 
 	t_player    player;
+	t_map       *map;           // Pointeur vers la map (pour les collisions)
+	t_textures  *textures;      // Pointeur vers les textures
 
 	void        *img;           // Pointeur vers l'image
     char        *addr;          // Adresse des données de l'image
@@ -43,27 +66,6 @@ typedef struct s_game // structure principale qui contient tout
     int         endian;         // Ordre des octets
 
 }	t_game;
-
-typedef struct s_map
-{
-	char	**grid;
-	int		width;
-	int		height;
-	int		player_x;
-	int		player_y;
-	char	player_dir;
-}	t_map;
-
-typedef struct s_textures
-{
-	char *north; // juste le chemin "./textures/north.xpm"
-	char *south;
-	char *west;
-	char *east;
-
-	int floor[3]; // (R, G, B)
-	int ceiling[3]; // (R, G, B)
-}	t_textures;
 
 typedef struct s_ray
 {
@@ -129,7 +131,16 @@ void    calculate_wall_distance(t_ray *ray, t_player *player);
 
 //src/rendering
 void    render_frame(t_game *game, t_textures *textures, t_map *map);
+int     render_loop(t_game *game);
 void    put_pixel(t_game *game, int x, int y, int color);
-void    draw_vertical_line(t_game *game, int x, int start_y, int end_y, int color);
+void    draw_vertical_line(t_game *game, int x, int start_y, int end_y,
+			int color);
+void    calculate_draw_limits(t_ray *ray, int *start, int *end);
+void    draw_column(t_game *game, t_ray *ray, t_textures *textures, int x);
+int     rgb_to_int(int *rgb);
+
+//src/events
+int     handle_keypress(int keycode, t_game *game);
+int     close_window(t_game *game);
 
 #endif

@@ -33,6 +33,9 @@ int main(int argc, char **argv)
         game.player.pos_x, game.player.pos_y,
         game.player.dir_x, game.player.dir_y);
 
+    game.map = &map;
+    game.textures = &textures;
+
     game.win = mlx_new_window(game.mlx, WIN_WIDTH, WIN_HEIGHT, "cub3D");
     if (!game.win)
     {
@@ -49,8 +52,9 @@ int main(int argc, char **argv)
     game.addr = mlx_get_data_addr(game.img, &game.bits_per_pixel,
             &game.line_length, &game.endian);
 
-    render_frame(&game, &textures, &map);
-
+    mlx_hook(game.win, 17, 0, close_window, &game);
+    mlx_hook(game.win, 2, 0, handle_keypress, &game);
+    mlx_loop_hook(game.mlx, render_loop, &game);
     mlx_loop(game.mlx); /* boucle infini qui maintient la fenetre ouverte et
     ecoute les evenements (clics, touche, mouvements de fenetres, ...) */
     free_map_grid(&map);
