@@ -13,7 +13,12 @@ OBJDIR = obj
 
 SRCS = $(SRCSDIR)/main.c \
        $(SRCSDIR)/check/check_args.c \
-       $(SRCSDIR)/check/check_map.c
+       $(SRCSDIR)/parsing/parse_file.c \
+       $(SRCSDIR)/parsing/parse_colors.c \
+       $(SRCSDIR)/parsing/parse_textures.c \
+       $(SRCSDIR)/parsing/map_validator.c \
+       $(SRCSDIR)/parsing/map_reader.c \
+       $(SRCSDIR)/parsing/map_grid.c
 
 OBJS = $(patsubst $(SRCSDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 

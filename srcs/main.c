@@ -6,7 +6,7 @@ int main(int argc, char **argv)
     void    *win;
     t_textures textures;
 
-    ft_bzero(&textures, sizeof(t_textures)); // Initialiser tous les pointeurs à NULL
+    ft_bzero(&textures, sizeof(t_textures));
     if (check_args(argc, argv) == 0)
         exit(EXIT_FAILURE);
     if (check_map(argc, argv, &textures) == 0)

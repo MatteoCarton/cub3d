@@ -99,5 +99,6 @@ size_t				gnl_strlen(const char *str);
 char				*gnl_strjoin(char const *str1, char const *str2);
 char				*gnl_strchr(const char *str, int c);
 void				ft_free(char **str);
+void				*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 
 #endif

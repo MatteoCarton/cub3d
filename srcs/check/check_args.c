@@ -10,6 +10,7 @@ static int open_file(char *filename)
     close(fd);
     return (1);
 }
+
 static int check_name_map(char *map_name)
 {
     int length;
