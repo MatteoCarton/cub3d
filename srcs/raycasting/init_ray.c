@@ -63,6 +63,7 @@ void	algo_dda(t_ray *ray, t_map *map)
 	int	hit;
 
 	hit = 0;
+	ray->hit_door = 0;
 	while (hit == 0)
 	{
 		if (ray->dist_to_bord_x < ray->dist_to_bord_y)
@@ -78,7 +79,11 @@ void	algo_dda(t_ray *ray, t_map *map)
 			ray->side = 1;
 		}
 		if (is_wall_or_closed_door(map, ray->map_x, ray->map_y))
+		{
+			if (map->grid[ray->map_y][ray->map_x] == 'D')
+				ray->hit_door = 1;
 			hit = 1;
+		}
 	}
 }
 

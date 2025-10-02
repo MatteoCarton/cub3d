@@ -75,7 +75,8 @@ int	validate_textures(t_textures *textures)
 int	parse_config_line(char *line, t_textures *textures)
 {
 	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0
-		|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0)
+		|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0
+		|| ft_strncmp(line, "DO ", 3) == 0)
 	{
 		parse_textures(line, textures);
 		return (1);

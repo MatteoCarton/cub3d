@@ -39,6 +39,8 @@ static void	store_texture(char *line, char *path_texture, t_textures *textures)
 		textures->west = path_texture;
 	else if (ft_strncmp(line, "EA ", 3) == 0)
 		textures->east = path_texture;
+	else if (ft_strncmp(line, "DO ", 3) == 0)
+		textures->door = path_texture;
 }
 
 void	parse_textures(char *line, t_textures *textures)
@@ -58,6 +60,7 @@ void	init_textures(t_textures *textures)
 	textures->south = NULL;
 	textures->west = NULL;
 	textures->east = NULL;
+	textures->door = NULL;
 	i = 0;
 	while (i < 3)
 	{

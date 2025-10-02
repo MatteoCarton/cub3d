@@ -59,6 +59,7 @@ typedef struct s_textures
 	char *south;
 	char *west;
 	char *east;
+	char *door;
 
 	int floor[3]; // (R, G, B)
 	int ceiling[3]; // (R, G, B)
@@ -83,6 +84,7 @@ typedef struct s_game // structure principale qui contient tout
 	t_texture_img	tex_south;
 	t_texture_img	tex_west;
 	t_texture_img	tex_east;
+	t_texture_img	tex_door;
 
 	t_player    player;
 	t_map       *map;           // Pointeur vers la map (pour les collisions)
@@ -129,6 +131,9 @@ typedef struct s_ray
 
     // Position exacte où le rayon a touché le mur (pour les textures)
     double  wall_x;
+
+    // Si on a touché une porte
+    int     hit_door;
 }   t_ray;
 
 int		check_args(int argc, char **argv);

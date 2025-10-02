@@ -3,6 +3,8 @@
 /* Sélectionne quelle texture utiliser selon l'orientation du mur */
 static t_texture_img	*select_texture(t_game *game, t_ray *ray)
 {
+	if (ray->hit_door)
+		return (&game->tex_door);
 	if (ray->side == 0)
 	{
 		if (ray->step_direction_x > 0)

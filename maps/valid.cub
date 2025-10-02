@@ -2,6 +2,7 @@ NO ./textures/north_texture.xpm
 SO ./textures/south_texture.xpm
 WE ./textures/west_texture.xpm
 EA ./textures/east_texture.xpm
+DO ./textures/door.xpm
 
 F 40,35,30
 C 20,5,5

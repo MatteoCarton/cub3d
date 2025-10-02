@@ -20,4 +20,6 @@ void	load_all_textures(t_game *game, t_textures *textures)
 	load_single_texture(game->mlx, textures->south, &game->tex_south);
 	load_single_texture(game->mlx, textures->west, &game->tex_west);
 	load_single_texture(game->mlx, textures->east, &game->tex_east);
+	if (textures->door)
+		load_single_texture(game->mlx, textures->door, &game->tex_door);
 }
