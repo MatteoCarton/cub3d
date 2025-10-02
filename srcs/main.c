@@ -52,8 +52,11 @@ int main(int argc, char **argv)
     game.addr = mlx_get_data_addr(game.img, &game.bits_per_pixel,
             &game.line_length, &game.endian);
 
+    mlx_mouse_hide();
+    mlx_mouse_move(game.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
     mlx_hook(game.win, 17, 0, close_window, &game);
     mlx_hook(game.win, 2, 0, handle_keypress, &game);
+    mlx_hook(game.win, 6, 0, mouse_move, &game);
     mlx_loop_hook(game.mlx, render_loop, &game);
     mlx_loop(game.mlx); /* boucle infini qui maintient la fenetre ouverte et
     ecoute les evenements (clics, touche, mouvements de fenetres, ...) */

@@ -1,17 +1,5 @@
 #include "../../includes/cub3d.h"
 
-/* Codes des touches sur macOS (minilibx) */
-#define KEY_ESC     53
-#define KEY_W       13
-#define KEY_A       0
-#define KEY_S       1
-#define KEY_D       2
-#define KEY_LEFT    123
-#define KEY_RIGHT   124
-
-#define MOVE_SPEED  0.1    // Vitesse de déplacement
-#define ROT_SPEED   0.05   // Vitesse de rotation (en radians)
-
 /* Ferme la fenêtre proprement quand on appuie sur ESC ou clique sur la croix */
 int	close_window(t_game *game)
 {

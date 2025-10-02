@@ -26,6 +26,7 @@ SRCS = $(SRCSDIR)/main.c \
 	   $(SRCSDIR)/rendering/draw.c \
 	   $(SRCSDIR)/rendering/texture.c \
 	   $(SRCSDIR)/events/handle_input.c \
+	   $(SRCSDIR)/events/mouse_input.c \
 
 OBJS = $(patsubst $(SRCSDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 

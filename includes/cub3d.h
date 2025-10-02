@@ -13,6 +13,17 @@
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
 # define FOV 0.66
+#define KEY_ESC     53
+#define KEY_W       13
+#define KEY_A       0
+#define KEY_S       1
+#define KEY_D       2
+#define KEY_LEFT    123
+#define KEY_RIGHT   124
+
+#define MOVE_SPEED  0.1    // Vitesse de déplacement
+#define ROT_SPEED   0.05   // Vitesse de rotation (en radians)
+#define MOUSE_SENSITIVITY 0.002
 
 typedef struct s_texture_img
 {
@@ -159,5 +170,6 @@ void    draw_textured_wall(t_game *game, t_ray *ray, int x, int start,
 //src/events
 int     handle_keypress(int keycode, t_game *game);
 int     close_window(t_game *game);
+int     mouse_move(int x, int y, t_game *game);
 
 #endif
