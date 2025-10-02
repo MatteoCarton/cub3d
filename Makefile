@@ -19,6 +19,7 @@ SRCS = $(SRCSDIR)/main.c \
        $(SRCSDIR)/parsing/map_validator.c \
        $(SRCSDIR)/parsing/map_reader.c \
        $(SRCSDIR)/parsing/map_grid.c \
+       $(SRCSDIR)/parsing/parse_sprites.c \
 	   $(SRCSDIR)/textures/load_textures.c \
 	   $(SRCSDIR)/player/init_player.c \
 	   $(SRCSDIR)/raycasting/init_ray.c \
@@ -26,6 +27,7 @@ SRCS = $(SRCSDIR)/main.c \
 	   $(SRCSDIR)/rendering/draw.c \
 	   $(SRCSDIR)/rendering/texture.c \
 	   $(SRCSDIR)/rendering/minimap.c \
+	   $(SRCSDIR)/rendering/sprite.c \
 	   $(SRCSDIR)/events/handle_input.c \
 	   $(SRCSDIR)/events/mouse_input.c \
 

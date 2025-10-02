@@ -75,6 +75,15 @@ typedef struct s_player // position et direction du joueur
     double  plane_y;    // Vecteur plan caméra Y
 }	t_player;
 
+typedef struct s_sprite
+{
+	double	x;              // Position X du sprite
+	double	y;              // Position Y du sprite
+	int		type;           // Type de sprite (0=bear_trap, etc.)
+	double	distance;       // Distance au joueur (pour le tri)
+	int		current_frame;  // Frame actuelle de l'animation
+}	t_sprite;
+
 typedef struct s_game // structure principale qui contient tout
 {
 	void	*mlx;
@@ -85,10 +94,15 @@ typedef struct s_game // structure principale qui contient tout
 	t_texture_img	tex_west;
 	t_texture_img	tex_east;
 	t_texture_img	tex_door;
+	t_texture_img	bear_trap_frames[4];
 
 	t_player    player;
 	t_map       *map;           // Pointeur vers la map (pour les collisions)
 	t_textures  *textures;      // Pointeur vers les textures
+	t_sprite    *sprites;       // Tableau de sprites
+	int         sprite_count;   // Nombre de sprites
+	int         frame_count;    // Compteur pour l'animation
+	double      z_buffer[800];  // Distance des murs pour chaque colonne
 
 	void        *img;           // Pointeur vers l'image
     char        *addr;          // Adresse des données de l'image
@@ -153,6 +167,7 @@ void	free_map_lines(char **lines, int line_count);
 void	free_map_grid(t_map *map);
 
 int		parse_map_grid(char **lines, int start, t_map *map);
+int		parse_sprites(t_game *game);
 
 //src/textures
 void    load_all_textures(t_game *game, t_textures *textures);
@@ -179,6 +194,7 @@ int     get_texture_color(t_texture_img *tex, int tex_x, int tex_y);
 void    draw_textured_wall(t_game *game, t_ray *ray, int x, int start,
 			int end);
 void    draw_minimap(t_game *game);
+void    render_sprites(t_game *game);
 
 //src/events
 int     handle_keypress(int keycode, t_game *game);

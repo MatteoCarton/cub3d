@@ -35,6 +35,14 @@ int main(int argc, char **argv)
 
     game.map = &map;
     game.textures = &textures;
+    game.frame_count = 0;
+
+    if (!parse_sprites(&game))
+    {
+        printf("Error\nFailed to parse sprites\n");
+        return (1);
+    }
+    printf("Parsed %d sprites\n", game.sprite_count);
 
     game.win = mlx_new_window(game.mlx, WIN_WIDTH, WIN_HEIGHT, "cub3D");
     if (!game.win)

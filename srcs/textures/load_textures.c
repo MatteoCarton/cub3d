@@ -14,6 +14,23 @@ static void	load_single_texture(void *mlx, char *path, t_texture_img *tex)
 			&tex->line_length, &tex->endian);
 }
 
+static void	load_sprite_textures(t_game *game)
+{
+	char	path[50];
+	int		i;
+
+	i = 0;
+	while (i < 4)
+	{
+		ft_memset(path, 0, 50);
+		ft_strlcpy(path, "./textures/bear_trap00", 50);
+		path[22] = '0' + i;
+		ft_strlcat(path, ".xpm", 50);
+		load_single_texture(game->mlx, path, &game->bear_trap_frames[i]);
+		i++;
+	}
+}
+
 void	load_all_textures(t_game *game, t_textures *textures)
 {
 	load_single_texture(game->mlx, textures->north, &game->tex_north);
@@ -22,4 +39,5 @@ void	load_all_textures(t_game *game, t_textures *textures)
 	load_single_texture(game->mlx, textures->east, &game->tex_east);
 	if (textures->door)
 		load_single_texture(game->mlx, textures->door, &game->tex_door);
+	load_sprite_textures(game);
 }
