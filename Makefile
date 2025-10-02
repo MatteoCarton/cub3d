@@ -25,6 +25,7 @@ SRCS = $(SRCSDIR)/main.c \
 	   $(SRCSDIR)/rendering/render.c \
 	   $(SRCSDIR)/rendering/draw.c \
 	   $(SRCSDIR)/rendering/texture.c \
+	   $(SRCSDIR)/rendering/minimap.c \
 	   $(SRCSDIR)/events/handle_input.c \
 	   $(SRCSDIR)/events/mouse_input.c \
 

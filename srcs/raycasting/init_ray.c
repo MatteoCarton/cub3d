@@ -41,6 +41,16 @@ void	init_ray_step(t_ray *ray, t_player *player) // Calculer comment avancer et 
 }
 
 
+/* Vérifie si on a touché un mur ou une porte fermée */
+static int	is_wall_or_closed_door(t_map *map, int x, int y)
+{
+	if (map->grid[y][x] == '1')
+		return (1);
+	if (map->grid[y][x] == 'D' && map->doors[y][x] == 0)
+		return (1);
+	return (0);
+}
+
 /* RESUME DE L'ALGO =
 1. Compare dist_to_bord_x et dist_to_bord_y
 2. Prend le plus petit (= le bord le plus proche)
@@ -67,7 +77,7 @@ void	algo_dda(t_ray *ray, t_map *map)
 			ray->map_y += ray->step_direction_y;
 			ray->side = 1;
 		}
-		if (map->grid[ray->map_y][ray->map_x] == '1')
+		if (is_wall_or_closed_door(map, ray->map_x, ray->map_y))
 			hit = 1;
 	}
 }

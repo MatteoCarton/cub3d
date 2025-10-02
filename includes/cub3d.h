@@ -13,11 +13,17 @@
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
 # define FOV 0.66
+
+# define MINIMAP_SIZE 200
+# define MINIMAP_TILE_SIZE 10
+# define MINIMAP_X 10
+# define MINIMAP_Y 10
 #define KEY_ESC     53
 #define KEY_W       13
 #define KEY_A       0
 #define KEY_S       1
 #define KEY_D       2
+#define KEY_E       14
 #define KEY_LEFT    123
 #define KEY_RIGHT   124
 
@@ -44,6 +50,7 @@ typedef struct s_map
 	int		player_x;
 	int		player_y;
 	char	player_dir;
+	int		**doors;
 }	t_map;
 
 typedef struct s_textures
@@ -166,6 +173,7 @@ int     rgb_to_int(int *rgb);
 int     get_texture_color(t_texture_img *tex, int tex_x, int tex_y);
 void    draw_textured_wall(t_game *game, t_ray *ray, int x, int start,
 			int end);
+void    draw_minimap(t_game *game);
 
 //src/events
 int     handle_keypress(int keycode, t_game *game);

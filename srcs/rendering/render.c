@@ -20,6 +20,7 @@ void	render_frame(t_game *game, t_textures *textures, t_map *map)
 		draw_column(game, &ray, textures, x);
 		x++;
 	}
+	draw_minimap(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 }
 

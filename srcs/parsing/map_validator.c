@@ -9,7 +9,8 @@ int	is_map_line(char *line)
 	{
 		if (line[i] != ' ' && line[i] != '\t' && line[i] != '\n'
 			&& line[i] != '1' && line[i] != '0' && line[i] != 'N'
-			&& line[i] != 'S' && line[i] != 'E' && line[i] != 'W')
+			&& line[i] != 'S' && line[i] != 'E' && line[i] != 'W'
+			&& line[i] != 'D')
 			return (0);
 		i++;
 	}
@@ -43,7 +44,7 @@ int	validate_map_closed(t_map *map)
 		x = 0;
 		while (x < map->width)
 		{
-			if (map->grid[y][x] == '0')
+			if (map->grid[y][x] == '0' || map->grid[y][x] == 'D')
 			{
 				if (!check_border(map, x, y))
 					return (0);

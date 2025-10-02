@@ -30,6 +30,31 @@ static int	get_map_dimensions(char **lines, int start, t_map *map)
 	return (1);
 }
 
+static int	allocate_doors(t_map *map)
+{
+	int	i;
+	int	j;
+
+	map->doors = malloc(sizeof(int *) * map->height);
+	if (!map->doors)
+		return (0);
+	i = 0;
+	while (i < map->height)
+	{
+		map->doors[i] = malloc(sizeof(int) * map->width);
+		if (!map->doors[i])
+			return (0);
+		j = 0;
+		while (j < map->width)
+		{
+			map->doors[i][j] = 0;
+			j++;
+		}
+		i++;
+	}
+	return (1);
+}
+
 static int	allocate_map_grid(t_map *map)
 {
 	int	i;
@@ -46,6 +71,8 @@ static int	allocate_map_grid(t_map *map)
 		i++;
 	}
 	map->grid[i] = NULL;
+	if (!allocate_doors(map))
+		return (0);
 	return (1);
 }
 
