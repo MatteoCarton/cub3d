@@ -5,8 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcastrat <mcastrat@student.42belgium.be    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD
 /*   Created: 2025/11/26 09:00:33 by mcastrat          #+#    #+#             */
 /*   Updated: 2026/01/02 17:24:46 by mcastrat         ###   ########.fr       */
+=======
+/*   Created: 2025/12/21 13:18:11 by mcastrat          #+#    #+#             */
+/*   Updated: 2025/12/21 13:18:12 by mcastrat         ###   ########.fr       */
+>>>>>>> ae1e321c442674b4e557df73ddd8c2b49159b347
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +26,16 @@
 # include <math.h>
 # include "../libft/inc/libft.h"
 # include "../libft/inc/get_next_line.h"
+<<<<<<< HEAD
+=======
+# include <stdbool.h>
+>>>>>>> ae1e321c442674b4e557df73ddd8c2b49159b347
 
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 # define FOV 0.99
 
+<<<<<<< HEAD
 # define KEY_ESC	65307
 # define KEY_W		119
 # define KEY_A		97
@@ -33,6 +43,20 @@
 # define KEY_D		100
 # define KEY_LEFT	65361
 # define KEY_RIGHT	65363
+=======
+# define MINIMAP_SIZE 200
+# define MINIMAP_TILE_SIZE 10
+# define MINIMAP_X 10
+# define MINIMAP_Y 10
+#define KEY_ESC     65307
+#define KEY_W       119
+#define KEY_A       97
+#define KEY_S       115
+#define KEY_D       100
+#define KEY_E       101
+#define KEY_LEFT    65361
+#define KEY_RIGHT   65363
+>>>>>>> ae1e321c442674b4e557df73ddd8c2b49159b347
 
 # define MOVE_SPEED	0.2
 # define ROT_SPEED	0.05
