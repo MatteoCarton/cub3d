@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_colors.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcastrat <mcastrat@student.42belgium.be    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/28 16:37:51 by mcastrat          #+#    #+#             */
+/*   Updated: 2026/01/02 16:15:11 by mcastrat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d.h"
 
 static int	validate_rgb_count(char **rgb)
@@ -8,10 +20,7 @@ static int	validate_rgb_count(char **rgb)
 	while (rgb[i])
 		i++;
 	if (i != 3)
-	{
-		printf("Error\nInvalid color format\n");
-		return (0);
-	}
+		return (printf("Error\nInvalid color format\n"), 0);
 	return (1);
 }
 
@@ -27,10 +36,7 @@ static int	validate_rgb_digits(char **rgb)
 		while (rgb[j][m])
 		{
 			if (!ft_isdigit(rgb[j][m]))
-			{
-				printf("Error\nColor values must be numbers only\n");
-				return (0);
-			}
+				return (printf("Error\nColor must be numbers only\n"), 0);
 			m++;
 		}
 		j++;
@@ -48,10 +54,7 @@ static int	validate_rgb_range(char **rgb, int *color_array)
 	{
 		value = ft_atoi(rgb[j]);
 		if (value < 0 || value > 255)
-		{
-			printf("Error\nColor values must be between 0 and 255\n");
-			return (0);
-		}
+			return (printf("Error\nColor must be 0-255\n"), 0);
 		color_array[j] = value;
 		j++;
 	}
@@ -71,7 +74,7 @@ static void	free_rgb_array(char **rgb)
 	free(rgb);
 }
 
-void	parse_color(char *line, int *color_array)
+int	parse_color(char *line, int *color_array)
 {
 	char	*color;
 	char	**rgb;
@@ -82,7 +85,7 @@ void	parse_color(char *line, int *color_array)
 		printf("Error\nEmpty color value\n");
 		if (color)
 			free(color);
-		exit(EXIT_FAILURE);
+		return (0);
 	}
 	rgb = ft_split(color, ',');
 	if (!validate_rgb_count(rgb) || !validate_rgb_digits(rgb)
@@ -90,8 +93,9 @@ void	parse_color(char *line, int *color_array)
 	{
 		free(color);
 		free_rgb_array(rgb);
-		exit(EXIT_FAILURE);
+		return (0);
 	}
 	free(color);
 	free_rgb_array(rgb);
+	return (1);
 }

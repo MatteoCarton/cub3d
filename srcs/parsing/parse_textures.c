@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_textures.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcastrat <mcastrat@student.42belgium.be    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/01 10:41:29 by mcastrat          #+#    #+#             */
+/*   Updated: 2026/01/02 17:40:43 by mcastrat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d.h"
 
 static char	*extract_texture_path(char *line)
@@ -10,12 +22,12 @@ static char	*extract_texture_path(char *line)
 		printf("Error\nEmpty texture path\n");
 		if (path_texture)
 			free(path_texture);
-		exit(EXIT_FAILURE);
+		return (NULL);
 	}
 	return (path_texture);
 }
 
-static void	validate_texture_file(char *path_texture)
+static int	validate_texture_file(char *path_texture)
 {
 	int	fd;
 
@@ -24,48 +36,51 @@ static void	validate_texture_file(char *path_texture)
 	{
 		printf("Error\nTexture %s not found\n", path_texture);
 		free(path_texture);
-		exit(EXIT_FAILURE);
+		return (0);
 	}
 	close(fd);
+	return (1);
 }
 
-static void	store_texture(char *line, char *path_texture, t_textures *textures)
+static int	store_texture(char *line, char *path_texture, t_walls *walls)
 {
 	if (ft_strncmp(line, "NO ", 3) == 0)
-		textures->north = path_texture;
+	{
+		if (walls->north)
+			return (printf("Error\nDuplicate NO\n"), free(path_texture), 0);
+		return (walls->north = path_texture, 1);
+	}
 	else if (ft_strncmp(line, "SO ", 3) == 0)
-		textures->south = path_texture;
+	{
+		if (walls->south)
+			return (printf("Error\nDuplicate SO\n"), free(path_texture), 0);
+		return (walls->south = path_texture, 1);
+	}
 	else if (ft_strncmp(line, "WE ", 3) == 0)
-		textures->west = path_texture;
+	{
+		if (walls->west)
+			return (printf("Error\nDuplicate WE\n"), free(path_texture), 0);
+		return (walls->west = path_texture, 1);
+	}
 	else if (ft_strncmp(line, "EA ", 3) == 0)
-		textures->east = path_texture;
-	else if (ft_strncmp(line, "DO ", 3) == 0)
-		textures->door = path_texture;
+	{
+		if (walls->east)
+			return (printf("Error\nDuplicate EA\n"), free(path_texture), 0);
+		return (walls->east = path_texture, 1);
+	}
+	return (printf("Error\nInvalid texture ID\n"), free(path_texture), 0);
 }
 
-void	parse_textures(char *line, t_textures *textures)
+int	parse_textures(char *line, t_walls *walls)
 {
 	char	*path_texture;
 
 	path_texture = extract_texture_path(line);
-	validate_texture_file(path_texture);
-	store_texture(line, path_texture, textures);
-}
-
-void	init_textures(t_textures *textures)
-{
-	int	i;
-
-	textures->north = NULL;
-	textures->south = NULL;
-	textures->west = NULL;
-	textures->east = NULL;
-	textures->door = NULL;
-	i = 0;
-	while (i < 3)
-	{
-		textures->floor[i] = -1;
-		textures->ceiling[i] = -1;
-		i++;
-	}
+	if (!path_texture)
+		return (0);
+	if (!validate_texture_file(path_texture))
+		return (0);
+	if (!store_texture(line, path_texture, walls))
+		return (0);
+	return (1);
 }

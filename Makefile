@@ -2,8 +2,8 @@ NAME = cub3D
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g
-MLXDIR = minilibx_opengl_20191021
-MLXFLAGS = -L$(MLXDIR) -lmlx -framework OpenGL -framework AppKit -lz
+MLXDIR = minilibx-linux
+MLXFLAGS = -L$(MLXDIR) -lmlx -lXext -lX11 -lm -lz
 LIBFTDIR = libft
 LIBFT = $(LIBFTDIR)/libft.a
 
@@ -19,43 +19,50 @@ SRCS = $(SRCSDIR)/main.c \
        $(SRCSDIR)/parsing/map_validator.c \
        $(SRCSDIR)/parsing/map_reader.c \
        $(SRCSDIR)/parsing/map_grid.c \
-       $(SRCSDIR)/parsing/parse_sprites.c \
 	   $(SRCSDIR)/textures/load_textures.c \
 	   $(SRCSDIR)/player/init_player.c \
 	   $(SRCSDIR)/raycasting/init_ray.c \
 	   $(SRCSDIR)/rendering/render.c \
 	   $(SRCSDIR)/rendering/draw.c \
 	   $(SRCSDIR)/rendering/texture.c \
-	   $(SRCSDIR)/rendering/minimap.c \
-	   $(SRCSDIR)/rendering/sprite.c \
 	   $(SRCSDIR)/events/handle_input.c \
-	   $(SRCSDIR)/events/mouse_input.c \
+	   $(SRCSDIR)/cleanup/cleanup.c \
 
 OBJS = $(patsubst $(SRCSDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 
 all: mlx libft $(NAME)
 
 mlx:
-	@$(MAKE) -C $(MLXDIR)
+	@$(MAKE) -C $(MLXDIR) > /dev/null 2>&1
 
 libft:
-	@$(MAKE) -C $(LIBFTDIR)
+	@$(MAKE) -C $(LIBFTDIR) > /dev/null 2>&1
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(MLXFLAGS) -L$(LIBFTDIR) -lft -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(MLXFLAGS) -L$(LIBFTDIR) -lft -o $(NAME)
+	@echo "\033[0;32m"
+	@echo "   _____ _    _ ____  ____  _____  "
+	@echo "  / ____| |  | |  _ \|___ \|  __ \ "
+	@echo " | |    | |  | | |_) | __) | |  | |"
+	@echo " | |    | |  | |  _ < |__ <| |  | |"
+	@echo " | |____| |__| | |_) |___) | |__| |"
+	@echo "  \_____|\____/|____/|____/|_____/ "
+	@echo "\033[0m"
 
 $(OBJDIR)/%.o: $(SRCSDIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I$(INCDIR) -I$(MLXDIR) -I$(LIBFTDIR) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(INCDIR) -I$(MLXDIR) -I$(LIBFTDIR)/inc -c $< -o $@
 
 clean:
-	rm -rf $(OBJDIR)
-	@$(MAKE) -C $(MLXDIR) clean
-	@$(MAKE) -C $(LIBFTDIR) clean
+	@rm -rf $(OBJDIR)
+	@$(MAKE) -C $(MLXDIR) clean > /dev/null 2>&1
+	@$(MAKE) -C $(LIBFTDIR) clean > /dev/null 2>&1
+	@echo "\033[0;33mCleaned object files\033[0m"
 
 fclean: clean
-	rm -f $(NAME)
-	@$(MAKE) -C $(LIBFTDIR) fclean
+	@rm -f $(NAME)
+	@$(MAKE) -C $(LIBFTDIR) fclean > /dev/null 2>&1
+	@echo "\033[0;31mFull clean completed\033[0m"
 
 re: fclean all
 

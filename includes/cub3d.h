@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcastrat <mcastrat@student.42belgium.be    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/26 09:00:33 by mcastrat          #+#    #+#             */
+/*   Updated: 2026/01/02 17:24:46 by mcastrat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -7,31 +19,25 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
-# include "../libft/libft.h"
-# include <stdbool.h>
+# include "../libft/inc/libft.h"
+# include "../libft/inc/get_next_line.h"
 
-# define WIN_WIDTH 800
-# define WIN_HEIGHT 600
-# define FOV 0.66
+# define WIN_WIDTH 1280
+# define WIN_HEIGHT 720
+# define FOV 0.99
 
-# define MINIMAP_SIZE 200
-# define MINIMAP_TILE_SIZE 10
-# define MINIMAP_X 10
-# define MINIMAP_Y 10
-#define KEY_ESC     53
-#define KEY_W       13
-#define KEY_A       0
-#define KEY_S       1
-#define KEY_D       2
-#define KEY_E       14
-#define KEY_LEFT    123
-#define KEY_RIGHT   124
+# define KEY_ESC	65307
+# define KEY_W		119
+# define KEY_A		97
+# define KEY_S		115
+# define KEY_D		100
+# define KEY_LEFT	65361
+# define KEY_RIGHT	65363
 
-#define MOVE_SPEED  0.1    // Vitesse de déplacement
-#define ROT_SPEED   0.05   // Vitesse de rotation (en radians)
-#define MOUSE_SENSITIVITY 0.002
+# define MOVE_SPEED	0.2
+# define ROT_SPEED	0.05
 
-typedef struct s_texture_img
+typedef struct s_img
 {
 	void	*img;
 	char	*addr;
@@ -40,9 +46,9 @@ typedef struct s_texture_img
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}	t_texture_img;
+}	t_img;
 
-typedef struct s_map
+typedef struct s_grid
 {
 	char	**grid;
 	int		width;
@@ -50,155 +56,97 @@ typedef struct s_map
 	int		player_x;
 	int		player_y;
 	char	player_dir;
-	int		**doors;
-}	t_map;
+}	t_grid;
 
-typedef struct s_textures
+typedef struct s_walls
 {
-	char *north; // juste le chemin "./textures/north.xpm"
-	char *south;
-	char *west;
-	char *east;
-	char *door;
+	char	*north;
+	char	*south;
+	char	*west;
+	char	*east;
+	int		floor[3];
+	int		ceiling[3];
+}	t_walls;
 
-	int floor[3]; // (R, G, B)
-	int ceiling[3]; // (R, G, B)
-}	t_textures;
-
-typedef struct s_player // position et direction du joueur
+typedef struct s_cam
 {
-	double  pos_x;      // Position X dans la map (coordonnees)
-    double  pos_y;      // Position Y dans la map
-    double  dir_x;      // Vecteur direction X (où regarde le joueur)
-    double  dir_y;      // Vecteur direction Y
-    double  plane_x;    // Vecteur plan caméra X (pour le FOV)
-    double  plane_y;    // Vecteur plan caméra Y
-}	t_player;
+	double	pos_x;
+	double	pos_y;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
+}	t_cam;
 
-typedef struct s_sprite
-{
-	double	x;              // Position X du sprite
-	double	y;              // Position Y du sprite
-	int		type;           // Type de sprite (0=bear_trap, etc.)
-	double	distance;       // Distance au joueur (pour le tri)
-	int		current_frame;  // Frame actuelle de l'animation
-}	t_sprite;
-
-typedef struct s_game // structure principale qui contient tout
+typedef struct s_data
 {
 	void	*mlx;
 	void	*win;
 
-	t_texture_img	tex_north;
-	t_texture_img	tex_south;
-	t_texture_img	tex_west;
-	t_texture_img	tex_east;
-	t_texture_img	tex_door;
-	t_texture_img	bear_trap_frames[4];
+	t_img	tex_north;
+	t_img	tex_south;
+	t_img	tex_west;
+	t_img	tex_east;
+	t_cam	cam;
+	t_grid	*grid;
+	t_walls	*walls;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_data;
 
-	t_player    player;
-	t_map       *map;           // Pointeur vers la map (pour les collisions)
-	t_textures  *textures;      // Pointeur vers les textures
-	t_sprite    *sprites;       // Tableau de sprites
-	int         sprite_count;   // Nombre de sprites
-	int         frame_count;    // Compteur pour l'animation
-	double      z_buffer[800];  // Distance des murs pour chaque colonne
-
-	void        *img;           // Pointeur vers l'image
-    char        *addr;          // Adresse des données de l'image
-    int         bits_per_pixel; // Bits par pixel (bits_per_pixel, line_length, endian : Infos techniques nécessaires pour MLX)
-    int         line_length;    // Longueur d'une ligne
-    int         endian;         // Ordre des octets
-
-}	t_game;
-
-typedef struct s_ray
+typedef struct s_cast
 {
-    // Direction du rayon
-    double  ray_dir_x;
-    double  ray_dir_y;
-    
-    // Position dans la map (quelle case on vérifie)
-    int     map_x;
-    int     map_y;
-    
-    // Distance jusqua la prochaine bordure (vertical/horizontal)
-    double  dist_to_bord_x;
-    double  dist_to_bord_y;
-    
-    // Distance pour avancer d'une case complète (calculer au debut, ne change pas)
-    double  delta_dist_x;
-    double  delta_dist_y;
-    
-    // Dans quelle direction on avance (-1 ou +1)
-    int     step_direction_x; // -1 si on va à gauche, +1 si on va à droite
-    int     step_direction_y; // -1 si on va en haut, +1 si on va en bas
-    
-    // Distance perpendiculaire au mur (évite l'effet fish-eye)
-    double  perp_wall_dist;
+	double	dir_x;
+	double	dir_y;
+	int		map_x;
+	int		map_y;
+	double	side_x;
+	double	side_y;
+	double	delta_x;
+	double	delta_y;
+	int		step_x;
+	int		step_y;
+	double	distance;
+	int		side;
+	int		wall_h;
+	double	wall_x;
+}	t_cast;
 
-    // Quel côté du mur on a touché (0 = vertical, 1 = horizontal)
-    int     side;
-
-    // Hauteur du mur à dessiner (en pixels)
-    int     line_height;
-
-    // Position exacte où le rayon a touché le mur (pour les textures)
-    double  wall_x;
-
-    // Si on a touché une porte
-    int     hit_door;
-}   t_ray;
-
+void	free_texture_paths(t_walls *walls);
 int		check_args(int argc, char **argv);
-int		check_map(int argc, char **argv, t_textures *textures, t_map *map);
-
-void	parse_color(char *line, int *color_array);
-void	parse_textures(char *line, t_textures *textures);
-void	init_textures(t_textures *textures);
-
+int		check_map(int argc, char **argv, t_walls *walls, t_grid *grid);
+int		parse_color(char *line, int *color_array);
+int		parse_textures(char *line, t_walls *walls);
+void	init_textures(t_walls *walls);
 int		is_map_line(char *line);
-int		validate_map_closed(t_map *map);
-int		validate_textures(t_textures *textures);
-int		parse_config_line(char *line, t_textures *textures);
-
+int		validate_map_closed(t_grid *grid);
+int		validate_textures(t_walls *walls);
+int		parse_config_line(char *line, t_walls *walls);
 char	**store_map_lines(char *filename, int *line_count);
 void	free_map_lines(char **lines, int line_count);
-void	free_map_grid(t_map *map);
-
-int		parse_map_grid(char **lines, int start, t_map *map);
-int		parse_sprites(t_game *game);
-
-//src/textures
-void    load_all_textures(t_game *game, t_textures *textures);
-
-//src/player
-void	init_player(t_player *player, t_map *map);
-
-//src/raycasting
-void    init_ray(t_ray *ray, t_player *player, int x);
-void    init_ray_step(t_ray *ray, t_player *player);
-void    algo_dda(t_ray *ray, t_map *map);
-void    calculate_wall_distance(t_ray *ray, t_player *player);
-
-//src/rendering
-void    render_frame(t_game *game, t_textures *textures, t_map *map);
-int     render_loop(t_game *game);
-void    put_pixel(t_game *game, int x, int y, int color);
-void    draw_vertical_line(t_game *game, int x, int start_y, int end_y,
-			int color);
-void    calculate_draw_limits(t_ray *ray, int *start, int *end);
-void    draw_column(t_game *game, t_ray *ray, t_textures *textures, int x);
-int     rgb_to_int(int *rgb);
-int     get_texture_color(t_texture_img *tex, int tex_x, int tex_y);
-void    draw_textured_wall(t_game *game, t_ray *ray, int x, int start,
-			int end);
-void    draw_minimap(t_game *game);
-void    render_sprites(t_game *game);
-
-//src/events
-int     handle_keypress(int keycode, t_game *game);
-int     close_window(t_game *game);
-int     mouse_move(int x, int y, t_game *game);
+void	free_map_grid(t_grid *grid);
+int		parse_map_grid(char **lines, int start, t_grid *grid);
+int		init_wall_textures(t_data *data, t_walls *walls);
+void	init_player(t_cam *cam, t_grid *grid);
+void	prepare_ray(t_cast *cast, t_cam *cam, int x);
+void	setup_step(t_cast *cast, t_cam *cam);
+void	algo_dda(t_cast *cast, t_grid *grid);
+void	calculate_wall_distance(t_cast *cast, t_cam *cam);
+void	render_frame(t_data *data, t_walls *walls, t_grid *grid);
+int		render_hook(t_data *data);
+void	set_pixel(t_data *data, int x, int y, int color);
+void	draw_vline(t_data *data, int x, int y_range[2], int color);
+void	draw_column(t_data *data, t_cast *cast, t_walls *walls, int x);
+int		rgb_to_color(int *rgb);
+int		get_tex_color(t_img *tex, int tex_x, int tex_y);
+void	draw_wall_tex(t_data *data, t_cast *cast, int x, int st_end[2]);
+int		handle_keypress(int keycode, t_data *data);
+int		close_window(t_data *data);
+void	cleanup_game(t_data *data, t_grid *grid, t_walls *walls);
+void	cleanup_and_exit(t_data *data, t_grid *grid, t_walls *walls,
+			int exit_code);
 
 #endif

@@ -1,53 +1,71 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   texture.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcastrat <mcastrat@student.42belgium.be    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/04 09:47:13 by mcastrat          #+#    #+#             */
+/*   Updated: 2026/01/02 17:46:26 by mcastrat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d.h"
 
-/* Sélectionne quelle texture utiliser selon l'orientation du mur */
-static t_texture_img	*select_texture(t_game *game, t_ray *ray)
+static t_img	*select_texture(t_data *data, t_cast *cast)
 {
-	if (ray->hit_door)
-		return (&game->tex_door);
-	if (ray->side == 0)
+	if (cast->side == 0)
 	{
-		if (ray->step_direction_x > 0)
-			return (&game->tex_east);
+		if (cast->step_x > 0)
+			return (&data->tex_east);
 		else
-			return (&game->tex_west);
+			return (&data->tex_west);
 	}
 	else
 	{
-		if (ray->step_direction_y > 0)
-			return (&game->tex_south);
+		if (cast->step_y > 0)
+			return (&data->tex_south);
 		else
-			return (&game->tex_north);
+			return (&data->tex_north);
 	}
 }
 
-/* Dessine un mur texturé pixel par pixel
-Pour chaque pixel Y du mur :
-1. Calcule quelle ligne de la texture (tex_y) correspond
-2. Récupère la couleur du pixel (tex_x, tex_y) de la texture
-3. Affiche ce pixel à l'écran */
-void	draw_textured_wall(t_game *game, t_ray *ray, int x, int start, int end)
+static void	init_tex_params(t_cast *cast, t_img *tex, int *tx, double *st)
 {
-	t_texture_img	*tex;
-	int				tex_x;
-	int				tex_y;
-	int				y;
-	double			step;
-	double			tex_pos;
+	*tx = (int)(cast->wall_x * (double)tex->width);
+	if ((cast->side == 0 && cast->step_x < 0)
+		|| (cast->side == 1 && cast->step_y > 0))
+		*tx = tex->width - *tx - 1;
+	*st = 1.0 * tex->height / cast->wall_h;
+}
 
-	tex = select_texture(game, ray);
-	tex_x = (int)(ray->wall_x * (double)tex->width);
-	if ((ray->side == 0 && ray->step_direction_x < 0)
-		|| (ray->side == 1 && ray->step_direction_y > 0))
-		tex_x = tex->width - tex_x - 1;
-	step = 1.0 * tex->height / ray->line_height;
-	tex_pos = (start - WIN_HEIGHT / 2 + ray->line_height / 2) * step;
-	y = start;
-	while (y <= end)
+static void	draw_tex_pixels(t_data *data, t_img *tex, int coords[3], int end)
+{
+	int		tex_y;
+	double	tex_pos;
+	double	step;
+
+	step = 1.0 * tex->height / coords[2];
+	tex_pos = (end - WIN_HEIGHT / 2 + coords[2] / 2) * step;
+	while (end <= coords[1])
 	{
 		tex_y = (int)tex_pos & (tex->height - 1);
 		tex_pos += step;
-		put_pixel(game, x, y, get_texture_color(tex, tex_x, tex_y));
-		y++;
+		set_pixel(data, coords[0], end, get_tex_color(tex, coords[3], tex_y));
+		end++;
 	}
+}
+
+void	draw_wall_tex(t_data *data, t_cast *cast, int x, int st_end[2])
+{
+	t_img	*tex;
+	int		coords[4];
+	double	step;
+
+	tex = select_texture(data, cast);
+	init_tex_params(cast, tex, &coords[3], &step);
+	coords[0] = x;
+	coords[1] = st_end[1];
+	coords[2] = cast->wall_h;
+	draw_tex_pixels(data, tex, coords, st_end[0]);
 }

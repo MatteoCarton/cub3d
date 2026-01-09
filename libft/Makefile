@@ -1,97 +1,98 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mcarton <mcarton@student.s19.be>           +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/16 13:13:54 by mcarton           #+#    #+#              #
-#    Updated: 2025/03/25 13:35:12 by mcarton          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = libft.a
 
-SRC = ft_isalpha.c \
-	ft_isdigit.c \
-	ft_isalnum.c \
-	ft_isascii.c \
-	ft_isprint.c \
-	ft_strlen.c \
-	ft_memset.c \
-	ft_bzero.c \
-	ft_memcpy.c \
-	ft_memmove.c \
-	ft_strlcpy.c \
-	ft_strlcat.c \
-	ft_toupper.c \
-	ft_tolower.c \
-	ft_strchr.c \
-	ft_strrchr.c \
-	ft_strncmp.c \
-	ft_memchr.c \
-	ft_memcmp.c \
-	ft_strnstr.c \
-	ft_atoi.c \
-	ft_calloc.c \
-	ft_strdup.c \
-	ft_substr.c \
-	ft_strjoin.c \
-	ft_strtrim.c \
-	ft_split.c \
-	ft_itoa.c \
-	ft_strmapi.c \
-	ft_striteri.c \
-	ft_putchar_fd.c \
-	ft_putstr_fd.c \
-	ft_putendl_fd.c \
-	ft_putnbr_fd.c \
-	ft_printf.c \
-	ft_char.c \
-	ft_hex.c \
-	ft_num.c \
-	ft_ptr.c \
-	ft_str.c \
-	ft_unsigned.c \
-	get_next_line.c \
-	get_next_line_utils.c \
-	ft_realloc.c \
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -Iinc -fPIE
 
-SRC_BONUS = ft_lstnew_bonus.c \
-			ft_lstadd_front_bonus.c \
-			ft_lstsize_bonus.c \
-			ft_lstlast_bonus.c \
-			ft_lstadd_back_bonus.c \
-			ft_lstdelone_bonus.c \
-			ft_lstclear_bonus.c \
-			ft_lstiter_bonus.c \
-			ft_lstmap_bonus.c \
 
-CC = gcc
+OBJ_DIR = objects/
+OBJ_LIBFT_DIR = $(OBJ_DIR)libft/
+OBJ_PRINTF_DIR = $(OBJ_DIR)printf/
+OBJ_GNL_DIR = $(OBJ_DIR)gnl/
 
-CFLAGS = -Wall -Wextra -Werror
+SRC_LIBFT = src/libft/ft_atoi.c \
+            src/libft/ft_split.c \
+            src/libft/ft_bzero.c \
+			src/libft/ft_calloc.c \
+			src/libft/ft_isalnum.c \
+			src/libft/ft_isalpha.c \
+			src/libft/ft_isascii.c \
+			src/libft/ft_isdigit.c \
+			src/libft/ft_isprint.c \
+			src/libft/ft_itoa.c \
+			src/libft/ft_lstadd_back_bonus.c \
+			src/libft/ft_lstadd_front_bonus.c \
+			src/libft/ft_lstclear_bonus.c \
+			src/libft/ft_lstdelone_bonus.c \
+			src/libft/ft_lstiter_bonus.c \
+			src/libft/ft_lstlast_bonus.c \
+			src/libft/ft_lstmap_bonus.c \
+			src/libft/ft_lstnew_bonus.c \
+			src/libft/ft_lstsize_bonus.c \
+			src/libft/ft_memchr.c \
+			src/libft/ft_memcmp.c \
+			src/libft/ft_memcpy.c \
+			src/libft/ft_memmove.c \
+			src/libft/ft_memset.c \
+			src/libft/ft_putchar_fd.c \
+			src/libft/ft_putendl_fd.c \
+			src/libft/ft_putnbr_fd.c \
+			src/libft/ft_putstr_fd.c \
+			src/libft/ft_strchr.c \
+			src/libft/ft_strdup.c \
+			src/libft/ft_striteri.c \
+			src/libft/ft_strjoin.c \
+			src/libft/ft_strlcat.c \
+			src/libft/ft_strlcpy.c \
+			src/libft/ft_strlen.c \
+			src/libft/ft_strmapi.c \
+			src/libft/ft_strncmp.c \
+			src/libft/ft_strnstr.c \
+			src/libft/ft_strrchr.c \
+			src/libft/ft_strtrim.c \
+			src/libft/ft_substr.c \
+			src/libft/ft_tolower.c \
+			src/libft/ft_toupper.c
 
-OBJ = $(SRC:.c=.o)
+SRC_PRINTF = src/ft_printf/ft_printf.c \
+             src/ft_printf/utilsputnbr.c \
+             src/ft_printf/utils.c 
 
-OBJ_BONUS = $(SRC_BONUS:.c=.o)
+SRC_GNL = src/get_next_line/get_next_line.c \
 
-all : $(NAME)
+OBJ_LIBFT = $(patsubst src/libft/%.c,$(OBJ_LIBFT_DIR)%.o,$(SRC_LIBFT))
+OBJ_PRINTF = $(patsubst src/ft_printf/%.c,$(OBJ_PRINTF_DIR)%.o,$(SRC_PRINTF))
+OBJ_GNL = $(patsubst src/get_next_line/%.c,$(OBJ_GNL_DIR)%.o,$(SRC_GNL))
 
-$(NAME) : $(OBJ)
-		ar rcs $(NAME) $(OBJ)
+OBJ = $(OBJ_LIBFT) $(OBJ_PRINTF) $(OBJ_GNL)
 
-bonus : $(OBJ) $(OBJ_BONUS)
-		ar rcs $(NAME) $(OBJ) $(OBJ_BONUS)
+all: create_dirs $(NAME)
 
-%.o : %.c libft.h
-	$(CC) $(CFLAGS) -c $< -o $@
+create_dirs:
+	@mkdir -p $(OBJ_LIBFT_DIR) $(OBJ_PRINTF_DIR) $(OBJ_GNL_DIR)
 
-clean :
-	rm -f $(OBJ) $(OBJ_BONUS)
+$(OBJ_LIBFT_DIR)%.o: src/libft/%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-fclean : clean
-		rm -f $(NAME)
 
-re : fclean all
+$(OBJ_PRINTF_DIR)%.o: src/ft_printf/%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-.PHONY : all bonus clean fclean re
+
+$(OBJ_GNL_DIR)%.o: src/get_next_line/%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+
+$(NAME): $(OBJ)
+	@ar rcs $(NAME) $(OBJ)
+
+clean:
+	@rm -rf $(OBJ_DIR)
+
+
+fclean: clean
+	@rm -f $(NAME)
+
+
+re: fclean all
+
+.PHONY: all clean fclean re create_dirs

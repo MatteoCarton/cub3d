@@ -1,43 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   load_textures.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcastrat <mcastrat@student.42belgium.be    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/03 08:17:42 by mcastrat          #+#    #+#             */
+/*   Updated: 2025/12/21 11:28:09 by mcastrat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d.h"
 
-/* Charge une texture et récupère toutes ses infos (img, addr, width, height)
-Pour pouvoir ensuite lire les pixels de la texture */
-static void	load_single_texture(void *mlx, char *path, t_texture_img *tex)
+static int	load_single_texture(void *mlx, char *path, t_img *tex)
 {
 	tex->img = mlx_xpm_file_to_image(mlx, path, &tex->width, &tex->height);
 	if (!tex->img)
 	{
 		printf("Error\nFailed to load texture: %s\n", path);
-		exit(EXIT_FAILURE);
+		return (0);
 	}
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bits_per_pixel,
 			&tex->line_length, &tex->endian);
+	return (1);
 }
 
-static void	load_sprite_textures(t_game *game)
+int	init_wall_textures(t_data *data, t_walls *walls)
 {
-	char	path[50];
-	int		i;
-
-	i = 0;
-	while (i < 4)
-	{
-		ft_memset(path, 0, 50);
-		ft_strlcpy(path, "./textures/bear_trap00", 50);
-		path[22] = '0' + i;
-		ft_strlcat(path, ".xpm", 50);
-		load_single_texture(game->mlx, path, &game->bear_trap_frames[i]);
-		i++;
-	}
-}
-
-void	load_all_textures(t_game *game, t_textures *textures)
-{
-	load_single_texture(game->mlx, textures->north, &game->tex_north);
-	load_single_texture(game->mlx, textures->south, &game->tex_south);
-	load_single_texture(game->mlx, textures->west, &game->tex_west);
-	load_single_texture(game->mlx, textures->east, &game->tex_east);
-	if (textures->door)
-		load_single_texture(game->mlx, textures->door, &game->tex_door);
-	load_sprite_textures(game);
+	if (!load_single_texture(data->mlx, walls->north, &data->tex_north))
+		return (0);
+	if (!load_single_texture(data->mlx, walls->south, &data->tex_south))
+		return (0);
+	if (!load_single_texture(data->mlx, walls->west, &data->tex_west))
+		return (0);
+	if (!load_single_texture(data->mlx, walls->east, &data->tex_east))
+		return (0);
+	return (1);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_validator.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcastrat <mcastrat@student.42belgium.be    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/29 14:52:33 by mcastrat          #+#    #+#             */
+/*   Updated: 2026/01/02 17:37:11 by mcastrat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d.h"
 
 int	is_map_line(char *line)
@@ -9,45 +21,37 @@ int	is_map_line(char *line)
 	{
 		if (line[i] != ' ' && line[i] != '\t' && line[i] != '\n'
 			&& line[i] != '1' && line[i] != '0' && line[i] != 'N'
-			&& line[i] != 'S' && line[i] != 'E' && line[i] != 'W'
-			&& line[i] != 'D' && line[i] != '2')
+			&& line[i] != 'S' && line[i] != 'E' && line[i] != 'W')
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-static int	check_border(t_map *map, int x, int y)
+static int	check_border(t_grid *grid, int x, int y)
 {
-	if (y == 0 || y == map->height - 1 || x == 0 || x == map->width - 1)
-	{
-		printf("Error\nMap not closed at borders\n");
-		return (0);
-	}
-	if (map->grid[y - 1][x] == ' ' || map->grid[y + 1][x] == ' '
-		|| map->grid[y][x - 1] == ' ' || map->grid[y][x + 1] == ' ')
-	{
-		printf("Error\nMap not properly enclosed\n");
-		return (0);
-	}
+	if (y == 0 || y == grid->height - 1 || x == 0 || x == grid->width - 1)
+		return (printf("Error\nMap not closed at borders\n"), 0);
+	if (grid->grid[y - 1][x] == ' ' || grid->grid[y + 1][x] == ' '
+		|| grid->grid[y][x - 1] == ' ' || grid->grid[y][x + 1] == ' ')
+		return (printf("Error\nMap not properly enclosed\n"), 0);
 	return (1);
 }
 
-int	validate_map_closed(t_map *map)
+int	validate_map_closed(t_grid *grid)
 {
 	int	x;
 	int	y;
 
 	y = 0;
-	while (y < map->height)
+	while (y < grid->height)
 	{
 		x = 0;
-		while (x < map->width)
+		while (x < grid->width)
 		{
-			if (map->grid[y][x] == '0' || map->grid[y][x] == 'D'
-				|| map->grid[y][x] == '2')
+			if (grid->grid[y][x] == '0')
 			{
-				if (!check_border(map, x, y))
+				if (!check_border(grid, x, y))
 					return (0);
 			}
 			x++;
@@ -57,40 +61,12 @@ int	validate_map_closed(t_map *map)
 	return (1);
 }
 
-int	validate_textures(t_textures *textures)
+int	validate_textures(t_walls *walls)
 {
-	if (!textures->north || !textures->south
-		|| !textures->west || !textures->east)
-	{
-		printf("Error\nMissing texture\n");
-		return (0);
-	}
-	if (textures->floor[0] == -1 || textures->ceiling[0] == -1)
-	{
-		printf("Error\nMissing floor or ceiling color\n");
-		return (0);
-	}
+	if (!walls->north || !walls->south
+		|| !walls->west || !walls->east)
+		return (printf("Error\nMissing texture\n"), 0);
+	if (walls->floor[0] == -1 || walls->ceiling[0] == -1)
+		return (printf("Error\nMissing floor or ceiling color\n"), 0);
 	return (1);
-}
-
-int	parse_config_line(char *line, t_textures *textures)
-{
-	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0
-		|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0
-		|| ft_strncmp(line, "DO ", 3) == 0)
-	{
-		parse_textures(line, textures);
-		return (1);
-	}
-	else if (ft_strncmp(line, "F ", 2) == 0)
-	{
-		parse_color(line, textures->floor);
-		return (1);
-	}
-	else if (ft_strncmp(line, "C ", 2) == 0)
-	{
-		parse_color(line, textures->ceiling);
-		return (1);
-	}
-	return (0);
 }
