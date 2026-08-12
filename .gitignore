@@ -1,0 +1,9 @@
+# Produits de compilation — régénérés par `make`, jamais à versionner.
+cub3D
+obj/
+*.o
+*.a
+libft/objects/
+
+# macOS
+.DS_Store
