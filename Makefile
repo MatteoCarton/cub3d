@@ -48,10 +48,6 @@ $(NAME): $(OBJS) $(LIBFT)
 	@echo " | |____| |__| | |_) |___) | |__| |"
 	@echo "  \_____|\____/|____/|____/|_____/ "
 	@echo "\033[0m"
-<<<<<<< HEAD
-=======
-	@echo "\033[1;36mCompilation successful!\033[0m"
->>>>>>> ae1e321c442674b4e557df73ddd8c2b49159b347
 
 $(OBJDIR)/%.o: $(SRCSDIR)/%.c
 	@mkdir -p $(dir $@)
