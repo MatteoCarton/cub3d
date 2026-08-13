@@ -1,4 +1,5 @@
 NAME = cub3D
+BONUS_NAME = cub3D_bonus
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g
@@ -28,9 +29,39 @@ SRCS = $(SRCSDIR)/main.c \
 	   $(SRCSDIR)/events/handle_input.c \
 	   $(SRCSDIR)/cleanup/cleanup.c \
 
+BONUSDIR = $(SRCSDIR)/bonus
+
+BONUS_SRCS = $(BONUSDIR)/main_bonus.c \
+	   $(BONUSDIR)/check_args_bonus.c \
+	   $(BONUSDIR)/parse_file_bonus.c \
+	   $(BONUSDIR)/parse_colors_bonus.c \
+	   $(BONUSDIR)/parse_textures_bonus.c \
+	   $(BONUSDIR)/parse_sprites_bonus.c \
+	   $(BONUSDIR)/map_validator_bonus.c \
+	   $(BONUSDIR)/map_reader_bonus.c \
+	   $(BONUSDIR)/map_grid_bonus.c \
+	   $(BONUSDIR)/load_textures_bonus.c \
+	   $(BONUSDIR)/init_player_bonus.c \
+	   $(BONUSDIR)/init_ray_bonus.c \
+	   $(BONUSDIR)/render_bonus.c \
+	   $(BONUSDIR)/draw_bonus.c \
+	   $(BONUSDIR)/texture_bonus.c \
+	   $(BONUSDIR)/sprite_bonus.c \
+	   $(BONUSDIR)/sprite_draw_bonus.c \
+	   $(BONUSDIR)/minimap_bonus.c \
+	   $(BONUSDIR)/minimap_draw_bonus.c \
+	   $(BONUSDIR)/mouse_bonus.c \
+	   $(BONUSDIR)/move_bonus.c \
+	   $(BONUSDIR)/handle_input_bonus.c \
+	   $(BONUSDIR)/cleanup_bonus.c \
+	   $(BONUSDIR)/cleanup_paths_bonus.c \
+
 OBJS = $(patsubst $(SRCSDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
+BONUS_OBJS = $(patsubst $(SRCSDIR)/%.c,$(OBJDIR)/%.o,$(BONUS_SRCS))
 
 all: mlx libft $(NAME)
+
+bonus: mlx libft $(BONUS_NAME)
 
 mlx:
 	@$(MAKE) -C $(MLXDIR) > /dev/null 2>&1
@@ -49,9 +80,20 @@ $(NAME): $(OBJS) $(LIBFT)
 	@echo "  \_____|\____/|____/|____/|_____/ "
 	@echo "\033[0m"
 
+$(BONUS_NAME): $(BONUS_OBJS) $(LIBFT)
+	@$(CC) $(CFLAGS) $(BONUS_OBJS) $(MLXFLAGS) -L$(LIBFTDIR) -lft \
+		-o $(BONUS_NAME)
+	@echo "\033[0;32mcub3D_bonus : sprites animes, minimap, souris\033[0m"
+
 $(OBJDIR)/%.o: $(SRCSDIR)/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -I$(INCDIR) -I$(MLXDIR) -I$(LIBFTDIR)/inc -c $< -o $@
+
+textures:
+	@./tools/gen_textures.sh
+
+textures-re:
+	@./tools/gen_textures.sh -f
 
 clean:
 	@rm -rf $(OBJDIR)
@@ -60,10 +102,10 @@ clean:
 	@echo "\033[0;33mCleaned object files\033[0m"
 
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(BONUS_NAME)
 	@$(MAKE) -C $(LIBFTDIR) fclean > /dev/null 2>&1
 	@echo "\033[0;31mFull clean completed\033[0m"
 
 re: fclean all
 
-.PHONY: all clean fclean re mlx libft
+.PHONY: all bonus clean fclean re mlx libft textures textures-re
