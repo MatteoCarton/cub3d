@@ -1,9 +1,13 @@
 # Produits de compilation — régénérés par `make`, jamais à versionner.
 cub3D
+cub3D_bonus
 obj/
 *.o
 *.a
 libft/objects/
+
+# Outils
+tools/__pycache__/
 
 # macOS
 .DS_Store
